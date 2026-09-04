@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guida Completa — Shakespeare Quiz</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #f8fafc;
+    color: #1e293b;
+    line-height: 1.5;
+  }
+
+  /* ============ COPERTINA ============ */
+  .cover {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4f46e5 100%);
+    color: white;
+    padding: 100px 40px;
+    text-align: center;
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  .cover h1 { font-size: 48px; font-weight: 800; margin-bottom: 16px; }
+  .cover .subtitle { font-size: 22px; opacity: 0.9; margin-bottom: 6px; }
+  .cover .steps-count { font-size: 18px; opacity: 0.75; margin-top: 30px; }
+  .cover .meta { font-size: 15px; opacity: 0.6; margin-top: 40px; }
+  .cover .icon-big { font-size: 72px; margin-bottom: 24px; }
+  .cover .tagline { font-size: 16px; opacity: 0.7; margin-top: 12px; font-style: italic; }
+
+  /* ============ SEZIONI ============ */
+  .page {
+    page-break-after: always;
+    padding: 36px 44px;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  .section-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #4f46e5;
+  }
+  .section-title .num {
+    display: inline-block;
+    background: #4f46e5;
+    color: white;
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    text-align: center;
+    line-height: 36px;
+    font-size: 18px;
+    margin-right: 12px;
+  }
+
+  /* ============ STEP ============ */
+  .step {
+    page-break-inside: avoid;
+    background: white;
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 6px 16px rgba(0,0,0,0.04);
+    border: 1px solid #e2e8f0;
+  }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .step-number {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    color: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .step-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+  }
+  .step-sub {
+    font-size: 14px;
+    color: #64748b;
+    margin-top: 2px;
+  }
+
+  .step-body p { margin-bottom: 10px; font-size: 15px; color: #334155; }
+  .step-body ul { padding-left: 22px; margin: 12px 0; }
+  .step-body li { margin-bottom: 8px; font-size: 15px; color: #334155; line-height: 1.5; }
+  .step-body li strong { color: #0f172a; }
+
+  .step-image {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+    border-radius: 12px;
+    margin: 16px auto;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+
+  .tip {
+    background: #f0f9ff;
+    border-left: 4px solid #3b82f6;
+    padding: 12px 16px;
+    border-radius: 0 10px 10px 0;
+    margin: 14px 0;
+    font-size: 14px;
+    color: #1e40af;
+    page-break-inside: avoid;
+  }
+
+  .warning {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    padding: 12px 16px;
+    border-radius: 0 10px 10px 0;
+    margin: 14px 0;
+    font-size: 14px;
+    color: #92400e;
+    page-break-inside: avoid;
+  }
+
+  .success-box {
+    background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+    border: 2px solid #86efac;
+    padding: 22px 26px;
+    border-radius: 14px;
+    margin: 18px 0;
+    text-align: center;
+    page-break-inside: avoid;
+  }
+  .success-box .big { font-size: 22px; font-weight: 700; color: #166534; }
+  .success-box p { font-size: 15px; color: #166534; margin: 6px 0; }
+
+  code {
+    background: #f1f5f9;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+  }
+
+  .code-block {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 14px 0;
+    overflow-x: auto;
+    page-break-inside: avoid;
+  }
+
+  .final-box {
+    background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+    border: 3px solid #4ade80;
+    border-radius: 18px;
+    padding: 28px 32px;
+    margin: 20px 0;
+    text-align: center;
+    page-break-inside: avoid;
+  }
+  .final-box h2 { color: #166534; font-size: 26px; margin-bottom: 10px; }
+  .final-box p { color: #15803d; font-size: 16px; margin: 8px 0; }
+
+  .grid-actions {
+    display: flex;
+    gap: 10px;
+    margin: 14px 0;
+    flex-wrap: wrap;
+  }
+  .action-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 16px;
+    flex: 1;
+    min-width: 180px;
+    page-break-inside: avoid;
+  }
+  .action-box .icon { font-size: 24px; margin-bottom: 4px; }
+  .action-box .label { font-weight: 600; font-size: 14px; color: #0f172a; }
+  .action-box .desc { font-size: 13px; color: #64748b; margin-top: 3px; }
+
+  .footer {
+    text-align: center;
+    padding: 28px 40px;
+    color: #94a3b8;
+    font-size: 13px;
+    page-break-inside: avoid;
+  }
+
+  hr {
+    border: none;
+    border-top: 2px dashed #cbd5e1;
+    margin: 20px 0;
+  }
+
+  @media print {
+    body { background: white; }
+    .step, .tip, .warning, .success-box, .final-box, .action-box, .code-block { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- =================== COPERTINA =================== -->
+<div class="cover">
+  <div class="icon-big">🎭</div>
+  <h1>Shakespeare Quiz</h1>
+  <div class="subtitle">Guida completa al deploy</div>
+  <div class="tagline">Da GitHub a Render, fino al tuo blog Blogger</div>
+  <div class="steps-count">10 passaggi • 20 minuti • Gratuito</div>
+  <div class="meta">
+    Preparata con ❤️ da MARKY<br>
+    Ultimo aggiornamento: Luglio 2026
+  </div>
+</div>
+
+<!-- =================== INDICE =================== -->
+<div class="page">
+  <h2 class="section-title">Indice</h2>
+  <div class="step">
+    <div class="step-body">
+      <p style="font-size:16px; font-weight:600; margin-bottom:16px;">La guida è divisa in 4 parti:</p>
+      <ul>
+        <li><strong>Parte 1 — Preparazione</strong> (Passi 1-2): Account GitHub e repository</li>
+        <li><strong>Parte 2 — Caricare i file</strong> (Passi 3-6): GitHub Desktop</li>
+        <li><strong>Parte 3 — Pubblicare online</strong> (Passi 7-9): Deploy su Render</li>
+        <li><strong>Parte 4 — Blog</strong> (Passo 10): Collegare a Blogger con iframe</li>
+      </ul>
+      <p style="margin-top:16px; color:#64748b;">Ogni passo è spiegato con immagini e istruzioni semplici. Non serve saper programmare!</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>⏱️ Quanto tempo ci vuole?</strong><br>
+    - Parte 1: 3 minuti<br>
+    - Parte 2: 8 minuti<br>
+    - Parte 3: 5 minuti (attesa: 5 minuti automatici)<br>
+    - Parte 4: 4 minuti<br>
+    <strong>TOTALE: circa 20 minuti</strong>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--                        PARTE 1: PREPARAZIONE                         -->
+<!-- ================================================================== -->
+<div class="page">
+  <h2 class="section-title"><span class="num">1</span> Preparazione — Account e Repository</h2>
+
+  <!-- PASSO 1 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">1</div>
+      <div>
+        <div class="step-title">Crea un account GitHub (gratuito)</div>
+        <div class="step-sub">Se non ce l'hai già</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li>Apri il browser e vai su <strong>github.com</strong></li>
+        <li>Clicca su <strong>"Sign up"</strong> (in alto a destra)</li>
+        <li>Inserisci <strong>email, password e nome utente</strong></li>
+        <li>Conferma l'email che ricevi</li>
+        <li>Seleziona il piano <strong>gratuito (Free)</strong></li>
+      </ul>
+      <div class="tip">
+        <strong>💡 Consiglio:</strong> Usa un nome utente semplice come "andreakeating1982" (quello che hai già). Ti servirà per tutti i passaggi successivi.
+      </div>
+      <div class="warning">
+        <strong>⚠️ Se hai già un account:</strong> Vai su github.com e fai il login. Passa direttamente al Passo 2.
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSO 2 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">2</div>
+      <div>
+        <div class="step-title">Crea il repository shakespeare-quiz</div>
+        <div class="step-sub">Il "contenitore" del progetto su GitHub</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li>Dopo il login, clicca sul pulsante <strong>"+"</strong> (in alto a destra) → <strong>"New repository"</strong></li>
+        <li>Oppure vai direttamente su <strong>github.com/new</strong></li>
+        <li>Nel campo <strong>"Repository name"</strong> scrivi: <code>shakespeare-quiz</code></li>
+        <li>Lascia selezionato <strong>"Public"</strong> (visibile a tutti, ma va bene così)</li>
+        <li><strong>NON spuntare</strong> nessuna casella (no README, no .gitignore, no license)</li>
+        <li>Clicca il pulsante verde <strong>"Create repository"</strong></li>
+      </ul>
+
+      <img src="https://media.easy-peasy.ai/2a7acf3f-cca7-4d59-aad6-6932daf36e1b/a5b3ef8a-f086-4405-93cf-ee5fa502d68c.png" alt="Crea repository su GitHub" class="step-image">
+
+      <div class="tip">
+        <strong>💡 Attenzione:</strong> Il nome deve essere <strong>esattamente</strong> "shakespeare-quiz" (tutto minuscolo, con il trattino). Se usi un nome diverso, il deploy su Render non funzionerà.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--                    PARTE 2: GITHUB DESKTOP                          -->
+<!-- ================================================================== -->
+<div class="page">
+  <h2 class="section-title"><span class="num">2</span> Caricare i file con GitHub Desktop</h2>
+
+  <!-- PASSO 3 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">3</div>
+      <div>
+        <div class="step-title">Scarica e installa GitHub Desktop</div>
+        <div class="step-sub">Il programma che carica i file su GitHub</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li>Apri il browser e vai su <strong>desktop.github.com/download</strong></li>
+        <li>Clicca su <strong>"Download for Windows"</strong> (o "for macOS" se usi Mac)</li>
+        <li>Apri il file scaricato e installalo (clicca "Avanti" fino alla fine)</li>
+      </ul>
+
+      <img src="https://media.easy-peasy.ai/2a7acf3f-cca7-4d59-aad6-6932daf36e1b/c44fd9c6-2f1d-4741-8755-581426112e7a.png" alt="Download GitHub Desktop" class="step-image">
+
+      <div class="tip">
+        <strong>💡 Consiglio:</strong> Se usi Windows, scegli la versione a 64 bit (quella consigliata). Se usi Mac, il sito lo riconosce automaticamente.
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSO 4 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">4</div>
+      <div>
+        <div class="step-title">Accedi a GitHub Desktop</div>
+        <div class="step-sub">Collega il programma al tuo account</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li>Apri GitHub Desktop (lo trovi nel menu Start / Applicazioni)</li>
+        <li>Alla prima apertura, clicca su <strong>"Sign in to GitHub.com"</strong></li>
+        <li>Si aprirà il browser — fai il login con il tuo account GitHub</li>
+        <li>Il browser ti chiederà di autorizzare GitHub Desktop: clicca <strong>"Continue"</strong></li>
+        <li>Torna al programma — ora sei collegato! ✅</li>
+      </ul>
+
+      <img src="https://media.easy-peasy.ai/2a7acf3f-cca7-4d59-aad6-6932daf36e1b/4995c40c-1969-4f33-8f75-87f1a14259bc.png" alt="Login GitHub Desktop" class="step-image">
+    </div>
+  </div>
+</div>
+
+<!-- PASSO 5 -->
+<div class="page">
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">5</div>
+      <div>
+        <div class="step-title">Clona il repository sul computer</div>
+        <div class="step-sub">Scarica il "contenitore vuoto" sul PC</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li>In GitHub Desktop, clicca su <strong>"File"</strong> → <strong>"Clone repository"</strong></li>
+        <li>Nella finestra che si apre, clicca sulla scheda <strong>"GitHub.com"</strong></li>
+        <li>Cerca nella lista il repository <strong>"andreakeating1982/shakespeare-quiz"</strong> e selezionalo</li>
+        <li>In <strong>"Local Path"</strong> scegli dove salvarlo (es. <strong>Desktop</strong>)</li>
+        <li>Clicca il pulsante blu <strong>"Clone"</strong></li>
+        <li>Dopo qualche secondo, il repository è sul tuo computer ✅</li>
+      </ul>
+
+      <img src="https://media.easy-peasy.ai/2a7acf3f-cca7-4d59-aad6-6932daf36e1b/293bfa44-d6d1-46f2-b790-918c7554ba2f.png" alt="Clone repository" class="step-image">
+
+      <div class="warning">
+        <strong>⚠️ Se non vedi il repository nella lista:</strong> Torna su GitHub.com e verifica che il repository "shakespeare-quiz" esista e sia pubblico. Se non c'è, ricrealo (Passo 2).
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSO 6 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">6</div>
+      <div>
+        <div class="step-title">Copia i file del progetto</div>
+        <div class="step-sub">Il passaggio più importante!</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Ora devi copiare i file del quiz nella cartella appena creata. Segui questi passaggi <strong>nell'ordine esatto</strong>:</p>
+
+      <div class="grid-actions">
+        <div class="action-box">
+          <div class="icon">📂</div>
+          <div class="label">Apri la cartella</div>
+          <div class="desc">In GitHub Desktop: Repository → Show in Explorer</div>
+        </div>
+        <div class="action-box">
+          <div class="icon">🗑️</div>
+          <div class="label">Cancella tutto</div>
+          <div class="desc">Seleziona SOLO i file visibili, NON le cartelle nascoste</div>
+        </div>
+        <div class="action-box">
+          <div class="icon">📦</div>
+          <div class="label">Estrai lo ZIP</div>
+          <div class="desc">Apri il pacchetto del progetto che ti ho preparato</div>
+        </div>
+        <div class="action-box">
+          <div class="icon">📋</div>
+          <div class="label">Copia e incolla</div>
+          <div class="desc">Seleziona TUTTO dalla cartella estratta, copia, incolla</div>
+        </div>
+      </div>
+
+      <img src="https://media.easy-peasy.ai/2a7acf3f-cca7-4d59-aad6-6932daf36e1b/ec1b2611-f703-49fb-b807-44a4e153b53f.png" alt="Copia corretta dei file" class="step-image">
+
+      <div class="warning">
+        <strong>⚠️ ATTENZIONE — Errore comune:</strong> Quando estrai lo ZIP, i file potrebbero essere dentro una cartella annidata. Devi copiare il <strong>CONTENUTO</strong> della cartella interna (client/, server/, Dockerfile, ecc.), non la cartella esterna.
+      </div>
+
+      <div class="tip">
+        <strong>💡 Il modo più semplice:</strong> Apri lo ZIP → apri la cartella interna → seleziona TUTTO (Ctrl+A) → copia (Ctrl+C) → vai nella cartella del progetto (Show in Explorer) → incolla (Ctrl+V). Fatto! ✅
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PASSO 7 -->
+<div class="page">
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">7</div>
+      <div>
+        <div class="step-title">Commit e Push — carica su GitHub</div>
+        <div class="step-sub">Il momento in cui i file diventano online</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Dopo aver copiato i file, torna su GitHub Desktop — vedrai l'elenco di tutti i file pronti per essere caricati:</p>
+      <ul>
+        <li>Nel campo in basso <strong>"Summary (required)"</strong>, scrivi: <code>Primo caricamento</code></li>
+        <li>Lascia vuoto il campo "Description"</li>
+        <li>Clicca il pulsante blu <strong>"Commit to main"</strong></li>
+        <li>Poi clicca su <strong>"Push origin"</strong> (frecetta verso l'alto sulla barra in alto)</li>
+        <li>GitHub Desktop caricherà tutti i file su internet...</li>
+      </ul>
+
+      <img src="https://media.easy-peasy.ai/2a7acf3f-cca7-4d59-aad6-6932daf36e1b/fc047432-6912-41ad-b8e0-ca804494159c.png" alt="Commit e Push" class="step-image">
+
+      <div class="success-box">
+        <p><span class="big">🎉 File caricati con successo!</span></p>
+        <p>Vai su <strong>github.com/andreakeating1982/shakespeare-quiz</strong> e vedrai tutti i file del progetto online! 🚀</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--                      PARTE 3: DEPLOY SU RENDER                       -->
+<!-- ================================================================== -->
+<div class="page">
+  <h2 class="section-title"><span class="num">3</span> Pubblicare online con Render</h2>
+
+  <!-- PASSO 8 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">8</div>
+      <div>
+        <div class="step-title">Crea un account Render (gratuito)</div>
+        <div class="step-sub">La piattaforma che ospiterà il quiz</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li>Vai su <strong>dashboard.render.com</strong></li>
+        <li>Clicca su <strong>"Sign Up"</strong> (in alto a destra)</li>
+        <li>Scegli <strong>"Sign up with GitHub"</strong> — è il modo più veloce</li>
+        <li>Autorizza Render a connettersi al tuo GitHub</li>
+        <li>Completa la registrazione e conferma l'email</li>
+      </ul>
+      <div class="tip">
+        <strong>💡 Consiglio:</strong> Usa "Sign up with GitHub" così Render vedrà automaticamente i tuoi repository. Non dovrai cercarli a mano.
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSO 9 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">9</div>
+      <div>
+        <div class="step-title">Deploy con Blueprint — tutto automatico</div>
+        <div class="step-sub">Render crea database e server in un colpo solo</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li>Appena entrato su Render, clicca su <strong>"New +"</strong> (in alto a destra)</li>
+        <li>Scegli <strong>"Blueprint"</strong> dal menu a tendina</li>
+        <li>Seleziona <strong>"Connect repository"</strong> e cerca <strong>"shakespeare-quiz"</strong></li>
+        <li>Connetti il repository e clicca <strong>"Apply"</strong> (in fondo alla pagina)</li>
+        <li>Render farà tutto da solo:
+          <br>✅ Creerà un database PostgreSQL
+          <br>✅ Creerà il web service con Docker
+          <br>✅ Avvierà l'app automaticamente
+        </li>
+        <li>Attendi circa 5 minuti...</li>
+      </ul>
+
+      <img src="https://media.easy-peasy.ai/2a7acf3f-cca7-4d59-aad6-6932daf36e1b/67fac5ee-c2f7-4939-9c9f-965c60e714f4.png" alt="Render Blueprint" class="step-image">
+
+      <div class="tip">
+        <strong>💡 Cosa succede dopo "Apply"?</strong> Render apre una pagina "Blueprints" che mostra due righe: una per il database (quiz-db) e una per il web service (shakespeare-quiz). Dopo qualche minuto, entrambi diventano verdi ✅
+      </div>
+
+      <div class="warning">
+        <strong>⚠️ Se il web service è rosso (Failed):</strong> Clicca sul nome del servizio, vai su "Logs" e guarda l'ultimo errore. Poi mandami lo screenshot e ti aiuto a risolvere!
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--                      PARTE 4: BLOGGER                                -->
+<!-- ================================================================== -->
+<div class="page">
+  <h2 class="section-title"><span class="num">4</span> Collegare il quiz al blog Blogger</h2>
+
+  <div class="step" style="margin-bottom:16px;">
+    <div class="step-body">
+      <p style="font-size:15px;">Ora che il quiz è online su Render, puoi incorporarlo nel tuo blog. Basta un semplice codice da incollare nel tuo post o pagina.</p>
+    </div>
+  </div>
+
+  <!-- PASSO 10 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">10</div>
+      <div>
+        <div class="step-title">Inserisci l'iframe nel blog</div>
+        <div class="step-sub">Copia, incolla e pubblica — 2 minuti</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Copia questo codice esattamente com'è:</p>
+
+      <div class="code-block">&lt;div style="text-align: center; margin: 20px 0;"&gt;<br>  &lt;iframe <br>    src="https://shakespeare-quiz.onrender.com/" <br>    style="width: 100%; max-width: 480px; height: 700px; <br>           border: none; border-radius: 12px; <br>           box-shadow: 0 4px 20px rgba(0,0,0,0.1);" <br>    allowfullscreen&gt;<br>  &lt;/iframe&gt;<br>&lt;/div&gt;</div>
+
+      <p>Poi segui questi passaggi su Blogger:</p>
+      <ul>
+        <li>Vai su <strong>blogger.com</strong> e accedi</li>
+        <li>Clicca su <strong>"Nuovo post"</strong> (o modifica una pagina esistente)</li>
+        <li>Nell'editor, clicca su <strong>"HTML"</strong> (in alto a sinistra, accanto a "Componi")</li>
+        <li><strong>Incolla</strong> il codice qui sopra dove vuoi che appaia il quiz</li>
+        <li>Clicca su <strong>"Componi"</strong> per vedere l'anteprima</li>
+        <li>Clicca <strong>"Pubblica"</strong> in alto a destra ✅</li>
+      </ul>
+
+      <img src="https://media.easy-peasy.ai/2a7acf3f-cca7-4d59-aad6-6932daf36e1b/7e053f6c-8446-4790-a0ba-9a2c5c529352.png" alt="Guida iframe Blogger" class="step-image">
+
+      <div class="tip">
+        <strong>💡 Se il quiz appare tagliato:</strong> Cambia <code>height: 700px</code> in <code>height: 800px</code> nel codice e riprova.
+      </div>
+
+      <div class="tip">
+        <strong>💡 Pagina dedicata:</strong> Invece di un post, puoi creare una "Pagina" nel tuo blog (dal menu Layout → Pagine) chiamata "Quiz su Shakespeare" e mettere l'iframe lì. È più ordinato!
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== CONCLUSIONE =================== -->
+<div class="page">
+  <div class="final-box">
+    <h2>🎉 Missione compiuta!</h2>
+    <p>Il tuo <strong>Shakespeare Quiz Interattivo</strong> è online e funzionante!</p>
+    <p>I tuoi studenti possono accedervi dal tuo blog o direttamente su:</p>
+    <p style="font-size:20px; font-weight:700; margin:12px 0;">
+      <a href="https://shakespeare-quiz.onrender.com/" style="color:#2563eb;">shakespeare-quiz.onrender.com</a>
+    </p>
+  </div>
+
+  <div class="step">
+    <div class="step-body">
+      <p style="font-weight:600; font-size:16px;">📌 Cosa hai ottenuto:</p>
+      <ul>
+        <li>✅ Un'app web funzionante su un server professionale</li>
+        <li>✅ Un database PostgreSQL automatico</li>
+        <li>✅ Aggiornamenti automatici (basta fare Push su GitHub)</li>
+        <li>✅ Il quiz accessibile da qualsiasi dispositivo</li>
+        <li>✅ Integrazione con il tuo blog Blogger</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">💡</div>
+      <div>
+        <div class="step-title">Consigli finali</div>
+        <div class="step-sub">Per mantenere il quiz sempre funzionante</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <ul>
+        <li><strong>Cambiare le domande?</strong> Contattami, ho uno strumento automatico per farlo!</li>
+        <li><strong>Aggiornare il quiz?</strong> Sostituisci i file nella cartella del progetto, fai Commit e Push su GitHub — Render si aggiorna da solo in 2 minuti</li>
+        <li><strong>Il quiz si spegne?</strong> Render free tier va in pausa dopo 15 minuti di inattività. Basta aprire la pagina per riattivarlo (ci mette 30 secondi)</li>
+        <li><strong>Problemi?</strong> Mandami uno screenshot e ti aiuto subito!</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">
+    Shakespeare Quiz — Guida completa al deploy<br>
+    Preparata con ❤️ da MARKY (Easy-Peasy.AI) | Luglio 2026
+  </div>
+</div>
+
+</body>
+</html>

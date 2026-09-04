@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guida Render — Shakespeare Quiz</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #f8fafc;
+    color: #1e293b;
+    line-height: 1.6;
+  }
+  .hero {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4f46e5 100%);
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .hero h1 { font-size: clamp(28px,5vw,48px); font-weight: 800; margin-bottom: 8px; position: relative; z-index: 1; }
+  .hero p { font-size: clamp(16px,2.5vw,20px); opacity: 0.9; max-width: 600px; margin: 0 auto; position: relative; z-index: 1; }
+  .hero .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    margin-top: 16px;
+    position: relative; z-index: 1;
+  }
+  .hero .time-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(74, 222, 128, 0.2);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 15px;
+    margin-top: 12px;
+    position: relative; z-index: 1;
+    color: #86efac;
+  }
+  .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+  .step {
+    background: white;
+    border-radius: 16px;
+    margin: 32px auto;
+    padding: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 6px 16px rgba(0,0,0,0.04);
+    overflow: hidden;
+    max-width: 750px;
+  }
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 28px 0;
+  }
+  .step-number {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    color: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .step-title {
+    font-size: clamp(18px,3vw,22px);
+    font-weight: 700;
+    color: #0f172a;
+  }
+  .step-subtitle {
+    font-size: 14px;
+    color: #64748b;
+    margin-top: 2px;
+  }
+  .step-content { padding: 16px 28px 28px; }
+  .step-content p { margin-bottom: 12px; font-size: 15px; color: #334155; }
+  .step-content ul { padding-left: 20px; margin: 12px 0; }
+  .step-content li { margin-bottom: 8px; font-size: 15px; color: #334155; }
+  .step-image {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+    margin: 16px 0;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .tip {
+    background: #f0f9ff;
+    border-left: 4px solid #3b82f6;
+    padding: 14px 18px;
+    border-radius: 0 10px 10px 0;
+    margin: 16px 0;
+    font-size: 14px;
+    color: #1e40af;
+  }
+  .tip strong { color: #1d4ed8; }
+  .warning {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    padding: 14px 18px;
+    border-radius: 0 10px 10px 0;
+    margin: 16px 0;
+    font-size: 14px;
+    color: #92400e;
+  }
+  .success-box {
+    background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+    border: 2px solid #86efac;
+    padding: 20px 24px;
+    border-radius: 14px;
+    margin: 20px 0;
+    text-align: center;
+  }
+  .success-box p { font-size: 16px; color: #166534; margin: 0; }
+  .success-box .big { font-size: 24px; font-weight: 700; }
+  code {
+    background: #f1f5f9;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+  }
+  .btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    color: white;
+    padding: 16px 32px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 17px;
+    margin: 8px 0;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 12px rgba(79,70,229,0.3);
+  }
+  .btn-download:hover { transform: translateY(-2px); }
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    color: #4f46e5;
+    padding: 14px 28px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    border: 2px solid #e2e8f0;
+    margin: 8px 4px;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: #4f46e5; background: #f8fafc; }
+  .divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    margin: 40px auto;
+    border-radius: 2px;
+  }
+  .footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: #94a3b8;
+    font-size: 14px;
+  }
+  .step-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+  .tag-green { background: #dcfce7; color: #166534; }
+  .tag-blue { background: #dbeafe; color: #1e40af; }
+  .tag-purple { background: #f3e8ff; color: #6b21a8; }
+  .tag-amber { background: #fef3c7; color: #92400e; }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .step-header { padding: 18px 18px 0; flex-wrap: wrap; }
+    .step-content { padding: 12px 18px 20px; }
+    .hero { padding: 40px 16px; }
+  }
+  .summary-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin: 16px 0;
+  }
+  .summary-card p { margin: 6px 0; }
+  .emoji-big { font-size: 32px; }
+  .checklist { list-style: none; padding: 0 !important; }
+  .checklist li {
+    padding: 8px 0 8px 32px;
+    position: relative;
+    font-size: 15px;
+  }
+  .checklist li::before {
+    content: '✅';
+    position: absolute;
+    left: 0;
+    top: 8px;
+  }
+  .arrow-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  .arrow-flow .box {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    padding: 8px 14px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 500;
+  }
+  .arrow-flow .arrow { font-size: 20px; color: #94a3b8; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>🎭 Shakespeare Quiz</h1>
+  <p>Guida passo-passo per mettere il quiz online — gratis e senza complicazioni</p>
+  <div class="time-badge">⏱️ 10 minuti • 7 passaggi • Gratuito</div>
+  <div class="badge">Niente codice • Niente terminale • Solo click</div>
+</div>
+
+<div class="container">
+
+  <!-- PRIMA DEL VIA -->
+  <div class="step" style="border: 2px solid #c084fc; background: #faf5ff;">
+    <div class="step-header">
+      <div class="step-number" style="background: linear-gradient(135deg, #9333ea, #a855f7);">0</div>
+      <div>
+        <div class="step-title">Cosa ti serve per iniziare</div>
+        <div class="step-subtitle">Prerequisiti — 2 minuti</div>
+      </div>
+    </div>
+    <div class="step-content">
+      <p>Prima di iniziare, assicurati di avere questi due account (sono gratis e non serve carta di credito):</p>
+      <div class="grid-2">
+        <div class="summary-card">
+          <p style="font-size: 24px; margin: 0;">🐙</p>
+          <p style="font-weight: 600; margin: 4px 0;">GitHub</p>
+          <p style="font-size: 13px; color: #64748b;">Vai su <strong>github.com</strong> e clicca "Sign up"</p>
+          <p style="font-size: 13px; color: #64748b;">Ti serve per "archiviare" il progetto online</p>
+        </div>
+        <div class="summary-card">
+          <p style="font-size: 24px; margin: 0;">🟣</p>
+          <p style="font-weight: 600; margin: 4px 0;">Render</p>
+          <p style="font-size: 13px; color: #64748b;">Vai su <strong>render.com</strong> e clicca "Sign up"</p>
+          <p style="font-size: 13px; color: #64748b;">Si collega con GitHub — usa "Sign up with GitHub"</p>
+        </div>
+      </div>
+      <div class="tip">
+        <strong>💡 Consiglio:</strong> Iscriviti a Render usando "Continua con GitHub" — così non devi inserire email e password, è automatico!
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSO 1 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">1</div>
+      <div>
+        <div class="step-title">Crea un repository su GitHub</div>
+        <div class="step-subtitle">Dove "vive" il tuo progetto online</div>
+      </div>
+    </div>
+    <div class="step-content">
+      <p>Un repository è come una cartella dove metti i file del progetto su internet.</p>
+      <ul>
+        <li>Entra su <strong>github.com</strong> e clicca sul pulsante <span class="step-tag tag-green">+</span> in alto a destra</li>
+        <li>Scegli <strong>"New repository"</strong></li>
+        <li>Come nome scrivi: <code>shakespeare-quiz</code></li>
+        <li>Lascia selezionato <strong>"Public"</strong> (è gratis)</li>
+        <li>Clicca il grande pulsante verde <strong>"Create repository"</strong></li>
+      </ul>
+      <img src="https://media.easy-peasy.ai/2a7acf3f-cca7-4d59-aad6-6932daf36e1b/32a99b63-f7f9-405a-93f6-63faf54545e8.png" alt="Creare un repository GitHub" class="step-image">
+      <div class="tip">
+        <strong>💡 Importante:</strong> Non spuntare "Add a README" o ".gitignore" — il progetto ha già i suoi file!
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSO 2 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">2</div>
+      <div>
+        <div class="step-title">Carica i file del progetto</div>
+        <div class="step-subtitle">Trascina la cartella del quiz su GitHub</div>
+      </div>
+    </div>
+    <div class="step-content">
+      <p>Ora che hai creato il repository vuoto, devi caricare i file del quiz:</p>
+      <ul>
+        <li>Nella pagina del repository, clicca su <strong>"uploading an existing file"</strong></li>
+        <li>Scarica il <strong>pacchetto ZIP</strong> del progetto (è incluso con questa guida)</li>
+        <li><strong>Estrai</strong> lo ZIP sul tuo computer</li>
+        <li><strong>Trascina</strong> TUTTI i file estratti nella pagina di GitHub (con il mouse, come quando copi file tra cartelle)</li>
+        <li>Scrivi un messaggio tipo: <code>"Primo caricamento"</code></li>
+        <li>Clicca <strong>"Commit changes"</strong></li>
+      </ul>
+      <img src="https://media.easy-peasy.ai/2a7acf3f-cca7-4d59-aad6-6932daf36e1b/01f34a39-43d9-42ba-bfd0-955cc6bb31e7.png" alt="Caricare i file su GitHub" class="step-image">
+      <div class="warning">
+        <strong>⚠️ Attenzione:</strong> Trascina TUTTI i file, non solo la cartella! Se vedi la scritta "We found 200+ files to commit", sei a posto.
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSO 3 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">3</div>
+      <div>
+        <div class="step-title">Vai su Render e scegli "Blueprint"</div>
+        <div class="step-subtitle">Il modo più semplice per deployare</div>
+      </div>
+    </div>
+    <div class="step-content">
+      <p>Ora entri in Render, la piattaforma che farà girare il tuo quiz online:</p>
+      <ul>
+        <li>Vai su <strong>dashboard.render.com</strong></li>
+        <li>Clicca sul pulsante <span class="step-tag tag-blue">New +</span> in alto a destra</li>
+        <li>Dal menu che si apre, scegli <strong>"Blueprint"</strong> (non "Web Service"!)</li>
+      </ul>
+      <img src="https://media.easy-peasy.ai/2a7acf3f-cca7-4d59-aad6-6932daf36e1b/67fac5ee-c2f7-4939-9f9c-965c60e714f4.png" alt="Scegliere Blueprint su Render" class="step-image">
+      <div class="tip">
+        <strong>💡 Perché Blueprint?</strong> Perché il file render.yaml che ho preparato dice a Render cosa creare: l'app + il database, tutto automatico. Con "Web Service" dovresti configurare tutto a mano.
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSO 4 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">4</div>
+      <div>
+        <div class="step-title">Collega il repository GitHub</div>
+        <div class="step-subtitle">Collega Render al progetto</div>
+      </div>
+    </div>
+    <div class="step-content">
+      <p>Render ti chiederà di collegare il tuo GitHub:</p>
+      <ul>
+        <li>Clicca su <strong>"Connect repository"</strong></li>
+        <li>Se è la prima volta, autorizza Render a vedere i tuoi repository</li>
+        <li>Cerca il repository <code>shakespeare-quiz</code> nella lista</li>
+        <li>Clicca sul suo nome per selezionarlo</li>
+        <li>Render mostrerà un riepilogo di quello che sta per creare:
+          <br><span style="display:inline-block;margin-top:6px;">✅ <strong>Database:</strong> quiz-db (PostgreSQL, gratuito)</span>
+          <br>✅ <strong>Web Service:</strong> shakespeare-quiz (Docker, gratuito)
+        </li>
+      </ul>
+      <img src="https://media.easy-peasy.ai/2a7acf3f-cca7-4d59-aad6-6932daf36e1b/8d887a10-881b-46d3-8a01-ee9dc02dd10d.png" alt="Connettere il repository" class="step-image">
+    </div>
+  </div>
+
+  <!-- PASSO 5 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">5</div>
+      <div>
+        <div class="step-title">Clicca "Apply" e attendi</div>
+        <div class="step-subtitle">Render fa tutto da solo — 3-5 minuti</div>
+      </div>
+    </div>
+    <div class="step-content">
+      <p>Ora la parte più bella: Render fa tutto in automatico!</p>
+      <ul>
+        <li>Clicca il grande pulsante <span class="step-tag tag-green">Apply</span></li>
+        <li>Render inizierà a creare:
+          <br>1️⃣ Il database PostgreSQL (30 secondi)
+          <br>2️⃣ Il web Service con la tua app (3-5 minuti)
+        </li>
+        <li>Vedrai una schermata con i <strong>log in tempo reale</strong> — sembra codice, ma non preoccuparti, è normale</li>
+        <li>Quando vedi <strong>"Service is live 🎉"</strong> in verde, è pronto!</li>
+      </ul>
+      <img src="https://media.easy-peasy.ai/2a7acf3f-cca7-4d59-aad6-6932daf36e1b/d8064b13-6e56-4c01-9415-ad91995ed575.png" alt="Cliccare Apply" class="step-image">
+      <div class="warning">
+        <strong>⏳ Pazienza:</strong> La prima volta ci mette 3-5 minuti perché deve "impacchettare" l'app. È normale. Fai un ☕ caffè mentre aspetti!
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSO 6 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">6</div>
+      <div>
+        <div class="step-title">La tua app è live! 🎉</div>
+        <div class="step-subtitle">Apri il quiz e provalo</div>
+      </div>
+    </div>
+    <div class="step-content">
+      <p>Quando il deploy è completo, vedrai il pulsante per aprire l'app:</p>
+      <ul>
+        <li>Clicca sul link che Render ti mostra:
+          <br><code>https://shakespeare-quiz.onrender.com</code>
+        </li>
+        <li>Si aprirà una nuova scheda con il tuo quiz funzionante!</li>
+        <li>Provalo subito: crea una classe, apri un'altra scheda come studente, entra col codice</li>
+      </ul>
+      <img src="https://media.easy-peasy.ai/2a7acf3f-cca7-4d59-aad6-6932daf36e1b/2288d7f7-7e01-4f75-ab18-6dd3b48998b2.png" alt="App live!" class="step-image">
+      <div class="success-box">
+        <p><span class="big">🎉 App live!</span></p>
+        <p>Il tuo Shakespeare Quiz è online e funzionante a questo indirizzo:</p>
+        <p style="font-weight: 700; font-size: 18px; margin-top: 8px; word-break: break-all;">https://shakespeare-quiz.onrender.com</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSO 7 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">7</div>
+      <div>
+        <div class="step-title">Aggiungi il link sul blog Blogger</div>
+        <div class="step-subtitle">I tuoi studenti troveranno il quiz dal blog</div>
+      </div>
+    </div>
+    <div class="step-content">
+      <p>Ora colleghiamo il quiz al tuo blog. È il passo più semplice:</p>
+      <ul>
+        <li>Vai su <strong>Blogger → "Layout"</strong></li>
+        <li>Clicca su <strong>"Aggiungi un Gadget"</strong> nella barra laterale o nel menu</li>
+        <li>Scegli <strong>"Link List"</strong></li>
+        <li>Inserisci:
+          <br>Titolo: <code>Quiz Shakespeare</code>
+          <br>URL: <code>https://shakespeare-quiz.onrender.com</code>
+        </li>
+        <li>Clicca <strong>"Salva"</strong> e poi <strong>"Salva disposizione"</strong></li>
+        <li>Vai a vedere il tuo blog — ora c'è il link al quiz! 🎉</li>
+      </ul>
+      <img src="https://media.easy-peasy.ai/2a7acf3f-cca7-4d59-aad6-6932daf36e1b/ac9bd695-4073-41b1-8429-597bf2ea8bf3.png" alt="Collegare a Blogger" class="step-image">
+      <div class="tip">
+        <strong>💡 Consiglio:</strong> Quando clicchi sul link durante la lezione, il quiz si apre in una nuova scheda. Proiettalo alla LIM e gli studenti entrano col codice dal telefono!
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RIEPILOGO SCHERMATA -->
+  <div class="step" style="border: 2px solid #86efac;">
+    <div class="step-header">
+      <div class="step-number" style="background: linear-gradient(135deg, #16a34a, #22c55e);">✓</div>
+      <div>
+        <div class="step-title">Riepilogo: cosa hai ottenuto</div>
+        <div class="step-subtitle">Tutto quello che hai costruito in 10 minuti</div>
+      </div>
+    </div>
+    <div class="step-content">
+      <div class="success-box" style="margin-top: 0;">
+        <p style="font-size: 18px;">👏 <strong>Complimenti! Hai messo online il quiz in modo autonomo!</strong></p>
+      </div>
+      <ul class="checklist">
+        <li>Il quiz è online su <strong>shakespeare-quiz.onrender.com</strong></li>
+        <li>Gli studenti entrano dal telefono col <strong>codice della classe</strong></li>
+        <li>L'insegnante vede le risposte in <strong>tempo reale</strong></li>
+        <li>Puoi scaricare il <strong>report PDF</strong> a fine lezione</li>
+        <li>Il link è sul tuo <strong>blog Blogger</strong> — pronto per la prossima lezione</li>
+        <li><strong>Nessuna dipendenza</strong> da Easy-Peasy — è tuo per sempre</li>
+      </ul>
+
+      <div class="arrow-flow">
+        <span class="box">📦 ZIP progetto</span>
+        <span class="arrow">→</span>
+        <span class="box">🐙 GitHub</span>
+        <span class="arrow">→</span>
+        <span class="box" style="background: #ede9fe; border-color: #a78bfa;">🟣 Render</span>
+        <span class="arrow">→</span>
+        <span class="box" style="background: #dbeafe; border-color: #60a5fa;">🌐 Blog</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEZIONE AIUTO -->
+  <div class="step" style="border: 2px solid #fbbf24;">
+    <div class="step-header">
+      <div class="step-number" style="background: linear-gradient(135deg, #d97706, #f59e0b);">?</div>
+      <div>
+        <div class="step-title">Hai problemi? Cose da sapere</div>
+        <div class="step-subtitle">Soluzioni ai problemi più comuni</div>
+      </div>
+    </div>
+    <div class="step-content">
+      <div class="warning">
+        <strong>"Mi dice che il repository non è stato trovato"</strong><br>
+        Vai su GitHub, apri il repository e controlla che ci siano i file. Se è vuoto, ripeti il Passo 2.
+      </div>
+      <div class="warning">
+        <strong>"Il deploy fallisce"</strong><br>
+        Clicca sui log e cercami la riga rossa. Di solito è un problema di connessione — riprova cliccando "Manual Deploy" → "Deploy latest commit".
+      </div>
+      <div class="warning">
+        <strong>"Il caricamento su GitHub è lento"</strong><br>
+        È normale se hai molti file. GitHub mostra "Crunching" — aspetta che finisca prima di cliccare "Commit changes".
+      </div>
+      <div class="tip">
+        <strong>📧 Ancora bloccato?</strong> Nessun problema — dimmi a che punto sei e ti aiuto io passo dopo passo!
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <p>Shakespeare Quiz — Guida per Render Blueprint</p>
+  <p style="margin-top:4px;">Preparata con ❤️ da MARKY | 2026</p>
+</div>
+
+</body>
+</html>

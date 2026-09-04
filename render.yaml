@@ -1,0 +1,39 @@
+# =============================================================================
+# render.yaml — Configurazione Render Blueprint (infrastruttura come codice)
+# =============================================================================
+# Cosa fa:
+# 1. Crea un database PostgreSQL gratuito (1GB)
+# 2. Crea un Web Service Docker con l'app
+# 3. Collega automaticamente DATABASE_URL e genera BETTER_AUTH_SECRET
+# =============================================================================
+# Come usarlo:
+#   1. Carica questo progetto su GitHub
+#   2. Vai su https://dashboard.render.com/blueprints
+#   3. Connetti il repository
+#   4. Clicca "Apply" — Render crea tutto automaticamente
+# =============================================================================
+
+databases:
+  - name: quiz-db
+    databaseName: quizdb
+    plan: free               # 1GB storage, gratuito per sempre
+    region: frankfurt        # Server in Europa (RFT)
+
+services:
+  - type: web
+    name: shakespeare-quiz
+    env: docker
+    dockerfilePath: ./deploy/Dockerfile.render
+    region: frankfurt
+    plan: free
+    healthCheckPath: /
+    numInstances: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: BETTER_AUTH_SECRET
+        generateValue: true    # Render genera automaticamente un segreto sicuro
+      - key: DATABASE_URL
+        fromDatabase:
+          name: quiz-db
+          property: connectionString

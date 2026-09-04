@@ -1,0 +1,54 @@
+# ============================================================
+# deploy/docker-compose.yml — Shakespeare Quiz Interattivo
+# Avvia l'app con PostgreSQL in un unico comando
+# ============================================================
+#
+# Utilizzo (dalla root della repo):
+#   docker compose -f deploy/docker-compose.yml up -d
+#
+# L'app sarà disponibile su http://localhost:3000
+# (il contesto di build è la ROOT della repo: usa il Dockerfile a root,
+#  che installa, builda ed esegue le migrazioni all'avvio)
+
+services:
+  # --- Database PostgreSQL ---
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: shakespeare
+      POSTGRES_PASSWORD: shakespeare_secret
+      POSTGRES_DB: shakespeare_quiz
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shakespeare -d shakespeare_quiz"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # --- Shakespeare Quiz App ---
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      # Connessione al database PostgreSQL (service "db" qui sopra)
+      DATABASE_URL: postgresql://shakespeare:shakespeare_secret@db:5432/shakespeare_quiz?sslmode=disable
+      # URL pubblico dell'app (cambia con il tuo dominio se in produzione)
+      BETTER_AUTH_URL: http://localhost:3000
+      # Chiave per crittografia delle sessioni (cambiala con una sicura!)
+      BETTER_AUTH_SECRET: cambiami-con-una-stringa-casuale-di-almeno-32-caratteri
+      NODE_ENV: production
+      PORT: 3000
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:

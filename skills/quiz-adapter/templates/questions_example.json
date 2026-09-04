@@ -1,0 +1,56 @@
+{
+  "title": "QUESTIONARIO SULL'ANTICA ROMA",
+  "pdf_topic": "Antica_Roma",
+  "report_pdf_filename": "Report_Quiz",
+  "blank_pdf_filename": "Questionario",
+  "questions": [
+    {
+      "number": 1,
+      "question": "In che anno è stata fondata Roma secondo la tradizione?",
+      "options": ["753 a.C.", "476 a.C.", "27 a.C.", "313 d.C."],
+      "correctAnswer": "753 a.C."
+    },
+    {
+      "number": 2,
+      "question": "Chi erano i leggendari fondatori di Roma?",
+      "options": ["Romolo e Remo", "Enea e Anchise", "Giulio Cesare e Pompeo", "Augusto e Marco Antonio"],
+      "correctAnswer": "Romolo e Remo"
+    },
+    {
+      "number": 3,
+      "question": "Quale forma di governo aveva la Roma repubblicana?",
+      "options": ["Monarchia", "Repubblica", "Impero", "Dittatura"],
+      "correctAnswer": "Repubblica"
+    },
+    {
+      "number": 4,
+      "question": "Chi fu il primo imperatore romano?",
+      "options": ["Giulio Cesare", "Augusto", "Nerone", "Traiano"],
+      "correctAnswer": "Augusto"
+    },
+    {
+      "number": 5,
+      "question": "Quale lingua parlavano gli antichi romani?",
+      "options": ["Greco", "Latino", "Etrusco", "Italiano antico"],
+      "correctAnswer": "Latino"
+    },
+    {
+      "number": 6,
+      "question": "Quale famoso anfiteatro romano veniva usato per i giochi gladiatori?",
+      "options": ["Il Pantheon", "Il Circo Massimo", "Il Colosseo", "Il Foro Romano"],
+      "correctAnswer": "Il Colosseo"
+    },
+    {
+      "number": 7,
+      "question": "Contro quale popolo combatterono le tre guerre puniche?",
+      "options": ["I Galli", "I Cartaginesi", "I Greci", "Gli Egizi"],
+      "correctAnswer": "I Cartaginesi"
+    },
+    {
+      "number": 8,
+      "question": "Quale via consolare collegava Roma a Capua?",
+      "options": ["Via Aurelia", "Via Appia", "Via Flaminia", "Via Emilia"],
+      "correctAnswer": "Via Appia"
+    }
+  ]
+}

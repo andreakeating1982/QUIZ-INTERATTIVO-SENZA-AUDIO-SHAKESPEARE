@@ -1,0 +1,46 @@
+# =============================================================================
+# deploy/Dockerfile.render — Dockerfile per Render (referenziato da render.yaml)
+# Multi-stage: 1) builda client (vite → dist/public) e server (esbuild →
+# dist/index.js); 2) runtime leggero con le sole dipendenze di produzione
+# (+ drizzle-kit per le migrazioni). All'avvio deploy/docker-entrypoint.sh
+# esegue `drizzle-kit push` e poi avvia `node dist/index.js`.
+# =============================================================================
+
+# ── Stage 1: build ──────────────────────────────────────────────────────────
+FROM node:20-alpine AS build
+WORKDIR /app
+RUN corepack enable pnpm
+
+# package.json + lockfile prima del resto (cache layer)
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+# Copia tutto il sorgente e builda (vite build + esbuild server)
+COPY . .
+RUN pnpm build
+
+# ── Stage 2: runtime ────────────────────────────────────────────────────────
+FROM node:20-alpine AS runtime
+WORKDIR /app
+ENV NODE_ENV=production
+
+RUN corepack enable pnpm
+
+# Dipendenze di produzione + drizzle-kit (serve all'avvio per `drizzle-kit push`)
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --prod --frozen-lockfile \
+    && pnpm add -D drizzle-kit@0.31.4
+
+# Artefatti di build + schema/migrazioni + entrypoint
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/drizzle ./drizzle
+COPY --from=build /app/drizzle.config.ts ./
+COPY deploy/docker-entrypoint.sh ./docker-entrypoint.sh
+RUN chmod +x ./docker-entrypoint.sh
+
+# Render inietta la propria PORT (es. 10000) a runtime: il server la legge da env
+ENV PORT=8080
+EXPOSE 8080
+
+ENTRYPOINT ["sh", "./docker-entrypoint.sh"]
+CMD ["node", "dist/index.js"]

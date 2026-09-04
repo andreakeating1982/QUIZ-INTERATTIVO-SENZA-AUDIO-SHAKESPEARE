@@ -1,0 +1,50 @@
+========================================
+   QUIZ INTERATTIVO SORGENTE
+   COME CARICARE QUESTO PACCHETTO SU GITHUB
+========================================
+
+Ciao! Questo pacchetto contiene l'app QUIZ INTERATTIVO SORGENTE
+(il quiz interattivo completo) + la cartella skills/ con le skill
+di automazione (clonazione con domande diverse, adapter, manutenzione).
+
+Caricandolo su GitHub avrai un repository da cui è possibile
+ricostruire in pochi minuti una nuova app identica con un set
+di domande diverso.
+
+COSA TI SERVE:
+- Un account GitHub (github.com)
+
+PASSAGGI:
+
+1. CREA LA REPOSITORY
+   - Vai su github.com e fai login
+   - Clicca "+" (in alto a destra) > "New repository"
+   - Nome: es. "shakespeare-quiz" (o quello che preferisci)
+   - Lascia su "Public" e NON spuntare "Add a README"
+   - Clicca "Create repository"
+
+2. CARICA I FILE
+   - Estrai QUESTO pacchetto ZIP in una cartella
+   - Nell'interfaccia web di GitHub clicca "uploading an existing file"
+   - Trascina TUTTI i file estratti nella pagina (attenzione: carica
+     il CONTENUTO della cartella, non la cartella stessa)
+   - Clicca "Commit changes"
+
+   (In alternativa puoi usare GitHub Desktop o git push da terminale:
+   git init && git add . && git commit -m "Quiz interattivo sorgente"
+   git branch -M main && git remote add origin <URL repo>
+   git push -u origin main)
+
+3. FATTO!
+   Ora il repository contiene il codice completo + le skill.
+
+COME CREARE UNA NUOVA APP CON DOMANDE DIVERSE:
+   - Prepara un file JSON con le nuove domande (modello in
+     skills/quiz-interattivo-sorgente/templates/questions_example.json)
+   - Chiedi a Marky di clonare l'app passando come sorgente
+     l'URL di questa repository GitHub (es.
+     https://github.com/IL-TUO-UTENTE/IL-TUO-REPO)
+   - In pochi minuti avrai la nuova app identica, con solo
+     le domande cambiate
+
+BUONA FORTUNA! 🚀

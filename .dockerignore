@@ -1,0 +1,42 @@
+# .dockerignore — contesto di build dei Dockerfile (root, deploy/, Render)
+# Git
+.git
+.gitignore
+
+# Node
+node_modules/
+.pnpm-store/
+
+# Build output (viene rigenerato dentro il container da pnpm build)
+dist/
+build/
+
+# Environment (i segreti vanno passati come variabili al container)
+.env
+.env.local
+.env.*.local
+.env.example
+
+# IDE / OS / log
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+
+# Test / temp / backup
+coverage/
+.nyc_output/
+tmp/
+temp/
+.quiz-backups/
+dev-server.log
+
+# Guide pesanti (non servono nel container)
+GUIDA-*.pdf
+GUIDA-*.zip
+*.zip
+*.pdf
