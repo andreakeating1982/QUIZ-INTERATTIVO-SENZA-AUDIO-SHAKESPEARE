@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { generateReportPdf, generateBlankQuestionsPdf } from "@/lib/reportPdf";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function TeacherPage() {
   // --- Create form state ---
@@ -473,15 +474,13 @@ export default function TeacherPage() {
                               ? studentAnswers.some((a: any) => a.questionNumber === classDetail.currentQuestion)
                               : studentAnswers.length > 0;
                             return (
-                              <div key={student.id} className="rounded-xl border border-border/50">
-                                <button onClick={() => setExpandedStudent(isExpanded ? null : student.id)} className={`w-full flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-muted/30 hover:bg-muted/60 transition-colors text-left ${isExpanded && studentAnswers.length > 0 ? 'rounded-t-xl' : 'rounded-xl'}`}>
-                                  {/* Hotspot grigio singolo a sinistra */}
-                                  <div className="size-2 rounded-full shrink-0 bg-gray-300" />
+                              <div key={student.id} className="rounded-xl border border-border/50 bg-muted/10">
+                                <button onClick={() => setExpandedStudent(isExpanded ? null : student.id)} className={`w-full flex items-center gap-2 sm:gap-3 px-3 py-2.5 sm:px-4 hover:bg-muted/30 transition-colors text-left ${isExpanded && studentAnswers.length > 0 ? 'rounded-t-xl' : 'rounded-xl'}`}>
+                                  <div className="size-2.5 rounded-full shrink-0 bg-gray-300"></div>
                                   <div className="flex-1 min-w-0">
                                     <span
-                                      className="group relative block min-w-0 font-bold text-sm text-foreground text-center cursor-pointer"
+                                      className="group relative block min-w-0 font-semibold text-sm text-foreground text-left cursor-pointer"
                                       onClick={(e: any) => {
-                                        // Su dispositivi touch (niente hover): tap = mostra/nasconde il nome completo
                                         if (window.matchMedia('(hover: none)').matches) {
                                           e.stopPropagation();
                                           setTooltipStudent(tooltipStudent === student.id ? null : student.id);
@@ -489,20 +488,18 @@ export default function TeacherPage() {
                                       }}
                                     >
                                       <span className="block truncate uppercase">{student.name}</span>
-                                      <span className={`pointer-events-none absolute left-1/2 top-full z-[100] mt-2 -translate-x-1/2 max-w-[85vw] rounded-md bg-black px-3 py-1.5 text-xs text-white shadow-lg transition-opacity duration-150 ${tooltipStudent === student.id ? "opacity-100" : "opacity-0 group-hover:opacity-100 group-active:opacity-100 group-focus:opacity-100"}`}>
+                                      <span className={`pointer-events-none absolute left-1/2 bottom-full z-[100] mb-2 -translate-x-1/2 max-w-[85vw] rounded-md bg-black px-3 py-1.5 text-xs text-white uppercase shadow-lg transition-opacity duration-150 ${tooltipStudent === student.id ? "opacity-100" : "opacity-0 group-hover:opacity-100 group-active:opacity-100 group-focus:opacity-100"}`}>
                                         {student.name}
                                       </span>
                                     </span>
                                   </div>
-                                  <div className={`text-xs sm:text-sm font-bold shrink-0 whitespace-nowrap ${hasAnsweredCurrent ? scoreColor(correctAnswers) : 'text-orange-500'}`}>
+                                  <div className={`text-[10px] sm:text-xs font-bold shrink-0 text-center leading-tight max-w-[70px] ${hasAnsweredCurrent ? scoreColor(correctAnswers) : 'text-orange-500'}`}>
                                     {hasAnsweredCurrent ? correctAnswers + '/10' : 'IN ATTESA DI INVIO'}
                                   </div>
-                                  <div className="flex items-center gap-0.5 shrink-0">
-                                    <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleRemoveStudent(student.id); }} disabled={removeStudentMutation.isPending} className="text-red-400 hover:text-red-600 hover:bg-red-50 px-1.5 h-7" title="Rimuovi lo studente">
-                                      <XCircle className="size-4" />
-                                    </Button>
+                                  <div className="flex items-center gap-0.5 shrink-0 ml-1">
+                                    <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleRemoveStudent(student.id); }} disabled={removeStudentMutation.isPending} className="text-red-500 hover:text-red-700 hover:bg-red-100 px-1.5 h-7 rounded-full" title="Rimuovi studente"><XCircle className="size-4" /></Button>
                                     {studentAnswers.length > 0 && (
-                                      <div className="text-muted-foreground ml-0.5">
+                                      <div className="text-muted-foreground">
                                         {isExpanded ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
                                       </div>
                                     )}
