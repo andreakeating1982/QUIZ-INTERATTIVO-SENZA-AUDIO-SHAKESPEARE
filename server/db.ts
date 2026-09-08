@@ -155,16 +155,32 @@ export async function resetClass(id: string) {
 
 // --- Students ---
 
+/**
+ * Normalizza un nome per il matching: minuscole, niente accenti, spazi
+ * multipli collassati. Così "Mario Rossi", "mario rossi", "Mario  Rossi" e
+ * "MARIO ROSSI" vengono riconosciuti come lo stesso studente.
+ */
+function normalizeStudentName(name: string): string {
+  return name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export async function addStudent(data: { classId: string; name: string }) {
   if (!db) throw new Error("Database not available");
 
+  // Nome canonico da salvare (spazi collassati, mantenendo maiuscole e accenti)
+  const canonicalName = data.name.trim().replace(/\s+/g, " ");
+  const normalized = normalizeStudentName(canonicalName);
+
   // Se esiste già uno studente con lo stesso nome in questa classe, lo riutilizza
-  const [existing] = await db.select()
+  const classmates = await db.select()
     .from(schema.students)
-    .where(and(
-      eq(schema.students.classId, data.classId),
-      eq(schema.students.name, data.name)
-    ));
+    .where(eq(schema.students.classId, data.classId));
+  const existing = classmates.find((s) => normalizeStudentName(s.name) === normalized);
 
   if (existing) {
     return existing;
@@ -173,7 +189,7 @@ export async function addStudent(data: { classId: string; name: string }) {
   const [student] = await db.insert(schema.students).values({
     id: nanoid(),
     classId: data.classId,
-    name: data.name,
+    name: canonicalName,
     score: 0,
     completed: false,
   }).returning();
