@@ -206,7 +206,7 @@ export default function StudentQuiz() {
         <header className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-9">
           <div className="mb-6 flex flex-col items-center gap-4">
             <h1 className="text-2xl sm:text-3xl font-bold leading-tight text-foreground text-center">
-              QUIZ INTERATTIVO
+              QUIZ INTERATTIVO SENZA AUDIO
             </h1>
             <a
               href="/"
@@ -273,7 +273,7 @@ export default function StudentQuiz() {
         <header className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-9">
           <div className="text-center">
             <h1 className="text-2xl sm:text-3xl font-bold leading-tight text-foreground">
-              QUIZ INTERATTIVO
+              QUIZ INTERATTIVO SENZA AUDIO
             </h1>
           </div>
         </header>
@@ -316,7 +316,7 @@ export default function StudentQuiz() {
         <header className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-9">
           <div className="text-center">
             <h1 className="text-2xl sm:text-3xl font-bold leading-tight text-foreground">
-              QUIZ INTERATTIVO
+              QUIZ INTERATTIVO SENZA AUDIO
             </h1>
           </div>
         </header>
@@ -378,7 +378,7 @@ export default function StudentQuiz() {
       <header className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-9">
         <div className="flex flex-col gap-2 text-center sm:text-left">
           <h1 className="text-2xl sm:text-3xl font-bold leading-tight text-foreground">
-            QUIZ INTERATTIVO
+            QUIZ INTERATTIVO SENZA AUDIO
           </h1>
         </div>
       </header>

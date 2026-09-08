@@ -45,14 +45,14 @@ export default function Home() {
         <header className="w-full max-w-5xl">
           <div className="mb-4 flex flex-col items-center gap-3 sm:mb-5 sm:gap-4">
             <h1 className="text-2xl sm:text-3xl font-bold leading-tight text-foreground text-center">
-              QUIZ INTERATTIVO
+              QUIZ INTERATTIVO SENZA AUDIO
             </h1>
             <a
               href="/docente"
               className="inline-flex w-fit items-center gap-2 rounded-md border border-border bg-card px-3.5 py-2 text-sm font-medium text-foreground shadow-sm transition hover:border-plum/40 hover:text-plum"
             >
               <School className="size-4" />
-              Area docente
+              AREA DOCENTE
             </a>
           </div>
         </header>
@@ -68,7 +68,7 @@ export default function Home() {
                 </div>
                 <h2 className="text-xl sm:text-2xl font-bold text-foreground">TROVA LA TUA CLASSE</h2>
                 <p className="text-sm text-muted-foreground leading-relaxed max-w-sm text-center">
-                  Inserisci il codice fornito dal docente per iniziare l'attività.
+                  INSERISCI IL CODICE FORNITO DAL DOCENTE PER INIZIARE L'ATTIVITÀ
                 </p>
 
                 <div className="w-full space-y-3 mt-2">

@@ -298,11 +298,11 @@ export default function TeacherPage() {
         <header className="shrink-0 border-b border-border/40 px-5 py-3 sm:px-6 sm:py-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h1 className="text-lg sm:text-xl font-bold leading-tight text-foreground text-center">
-              QUIZ INTERATTIVO
+              QUIZ INTERATTIVO SENZA AUDIO
             </h1>
             <a href="/" className="inline-flex mx-auto sm:mx-0 shrink-0 items-center gap-2 rounded-md border border-border bg-card px-3.5 py-2 text-sm font-medium text-foreground shadow-sm transition hover:border-plum/40 hover:text-plum">
               <Users className="size-4" />
-              Area studenti
+              AREA STUDENTI
             </a>
           </div>
         </header>
