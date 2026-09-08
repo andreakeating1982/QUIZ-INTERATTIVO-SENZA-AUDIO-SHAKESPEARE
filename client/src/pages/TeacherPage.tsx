@@ -296,13 +296,11 @@ export default function TeacherPage() {
 
         {/* UPBAR */}
         <header className="shrink-0 border-b border-border/40 px-5 py-3 sm:px-6 sm:py-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-            <div className="min-w-0">
-              <h1 className="text-lg sm:text-xl font-bold leading-tight text-foreground">
-                QUIZ INTERATTIVO
-              </h1>
-            </div>
-            <a href="/" className="inline-flex w-fit shrink-0 items-center gap-2 rounded-md border border-border bg-card px-3.5 py-2 text-sm font-medium text-foreground shadow-sm transition hover:border-plum/40 hover:text-plum">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <h1 className="text-lg sm:text-xl font-bold leading-tight text-foreground text-center">
+              QUIZ INTERATTIVO
+            </h1>
+            <a href="/" className="inline-flex mx-auto sm:mx-0 shrink-0 items-center gap-2 rounded-md border border-border bg-card px-3.5 py-2 text-sm font-medium text-foreground shadow-sm transition hover:border-plum/40 hover:text-plum">
               <Users className="size-4" />
               Area studenti
             </a>
