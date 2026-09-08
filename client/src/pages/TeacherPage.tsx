@@ -488,7 +488,7 @@ export default function TeacherPage() {
                                         }
                                       }}
                                     >
-                                      <span className="block truncate">{student.name}</span>
+                                      <span className="block truncate uppercase">{student.name}</span>
                                       <span className={`pointer-events-none absolute left-1/2 top-full z-[100] mt-2 -translate-x-1/2 max-w-[85vw] rounded-md bg-black px-3 py-1.5 text-xs text-white shadow-lg transition-opacity duration-150 ${tooltipStudent === student.id ? "opacity-100" : "opacity-0 group-hover:opacity-100 group-active:opacity-100 group-focus:opacity-100"}`}>
                                         {student.name}
                                       </span>
@@ -509,21 +509,24 @@ export default function TeacherPage() {
                                   </div>
                                 </button>
                                 {isExpanded && studentAnswers.length > 0 && (
-                                  <div className="border-t border-border/50 bg-muted/20 p-3 space-y-1.5 rounded-b-xl">
-                                    <p className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wider">RISPOSTE</p>
+                                  <div className="border-t border-border/40 bg-muted/15 p-4 space-y-1.5 rounded-b-xl">
                                     {studentAnswers.sort((a: any, b: any) => a.questionNumber - b.questionNumber).map((answer: any) => {
                                       const qData = shakespeareQuestions?.find((q: any) => q.number === answer.questionNumber);
                                       const correctAns = qData?.correctAnswer || '';
                                       return (
-                                        <div key={answer.id} className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-white/50">
-                                          <span className="text-xs text-muted-foreground font-mono w-4 shrink-0 text-center">#</span>
+                                        <div key={answer.id} className="flex items-start gap-2 px-3 py-2 rounded-lg bg-white/70 border border-border/30">
+                                          <span className="text-muted-foreground font-mono text-[11px] w-5 shrink-0 leading-4">#</span>
                                           {answer.isCorrect
-                                            ? <CheckCircle2 className="size-4 text-green-600 shrink-0" />
-                                            : <XCircle className="size-4 text-red-500 shrink-0" />}
-                                          <span className={answer.isCorrect ? "text-sm text-green-600" : "text-sm text-red-500"}>{answer.selectedAnswer}</span>
-                                          {!answer.isCorrect && (
-                                            <><span className="text-xs text-muted-foreground">→ </span><span className="text-sm text-green-600">{correctAns}</span></>
-                                          )}
+                                            ? <CheckCircle2 className="size-4 text-green-600 shrink-0 mt-0.5" />
+                                            : <XCircle className="size-4 text-red-500 shrink-0 mt-0.5" />}
+                                          <div className="flex-1 min-w-0 space-y-0.5">
+                                            <span className={`block text-xs font-medium break-words ${answer.isCorrect ? 'text-green-700' : 'text-red-600'}`} title={answer.selectedAnswer}>{answer.selectedAnswer}</span>
+                                            {!answer.isCorrect && (
+                                              <span className="block text-xs font-medium text-green-700 break-words" title={correctAns}>
+                                                <span className="text-muted-foreground mr-1">→</span>{correctAns}
+                                              </span>
+                                            )}
+                                          </div>
                                         </div>
                                       );
                                     })}
